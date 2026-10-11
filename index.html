@@ -3,118 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Binance Simulator Pro</title>
+    <title>Binance Master AIO Engine</title>
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; background-color: #0b0e11; color: #eaecef; padding: 20px 10px; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        h1 { color: #f3ba2f; font-size: 22px; margin-bottom: 5px; }
-        .setup-panel { width: 100%; max-width: 412px; background: #1e2026; padding: 18px; border-radius: 12px; border: 1px solid #2b3139; margin-bottom: 25px; }
-        .form-group { margin-bottom: 12px; display: flex; flex-direction: column; }
-        label { font-size: 11px; color: #848e9c; margin-bottom: 5px; }
-        input { padding: 10px; border-radius: 6px; border: 1px solid #474f59; background: #181a20; color: white; font-size: 14px; }
-        .action-btn { width: 100%; padding: 13px; background: #f3ba2f; color: #181a20; border: none; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; }
-        .mode-selector-tabs { display: flex; width: 100%; max-width: 412px; background: #1e2026; padding: 4px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #2b3139; }
-        .mode-tab-btn { flex: 1; padding: 10px; font-size: 12px; font-weight: bold; text-align: center; border-radius: 6px; cursor: pointer; color: #848e9c; }
-        .mode-tab-active { background: #f3ba2f; color: #181a20; }
-        .preview-canvas-container { width: 100%; max-width: 412px; background: #ffffff; color: #000000; border-radius: 12px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.7); min-height: 600px; }
-        .iphone-status-header-bar { height: 38px; display: flex; justify-content: space-between; align-items: center; padding: 0 24px; font-size: 14px; font-weight: 600; }
-        .iphone-dark-theme-bar { background: #181a20; color: #ffffff; }
-        .iphone-light-theme-bar { background: #ffffff; color: #000000; }
-        .bat-shell-container { width: 23px; height: 11.5px; border-radius: 3px; display: flex; align-items: center; padding: 1px; position: relative; }
-        .bat-shell-dark { border: 1px solid #ffffff; }
-        .bat-shell-light { border: 1px solid #000000; }
-        .bat-fill-level { height: 100%; border-radius: 0.8px; }
-        .bat-fill-dark { background: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Arial, sans-serif; background-color: #0b0e11; color: #eaecef; padding: 15px 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        h1 { color: #f3ba2f; font-size: 20px; text-align: center; margin-bottom: 4px; }
+        .sub { font-size: 11.5px; color: #848e9c; text-align: center; margin-bottom: 16px; }
+        
+        /* Master Control Panel */
+        .panel { width: 100%; max-width: 410px; background: #1e2026; padding: 16px; border-radius: 12px; border: 1px solid #2b3139; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .sec-title { font-size: 12.5px; font-weight: bold; color: #f3ba2f; margin-bottom: 12px; border-bottom: 1px solid #2b3139; padding-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .fg { margin-bottom: 10px; display: flex; flex-direction: column; }
+        label { font-size: 11px; color: #848e9c; margin-bottom: 3px; font-weight: 500; }
+        input { padding: 8px 10px; border-radius: 6px; border: 1px solid #474f59; background: #181a20; color: white; font-size: 13px; }
+        .btn-sync { width: 100%; padding: 12px; background: #f3ba2f; color: #181a20; border: none; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
+        .btn-sync:hover { background: #dfa516; }
+
+        /* Multi-View Route Tabs (Simulating 5 separate files) */
+        .route-tabs { display: flex; flex-wrap: wrap; gap: 4px; width: 100%; max-width: 410px; background: #1e2026; padding: 5px; border-radius: 10px; margin-bottom: 16px; border: 1px solid #2b3139; }
+        .rt-btn { flex: 1; min-width: 48%; padding: 8px 4px; font-size: 11px; font-weight: bold; text-align: center; border-radius: 6px; cursor: pointer; color: #848e9c; background: transparent; border: 1px solid transparent; transition: all 0.2s; }
+        .rt-btn.active { background: #f3ba2f; color: #181a20; border-color: #f3ba2f; }
+        .rt-btn.full-width { min-width: 100%; }
+
+        /* Direct Virtual Link Bar */
+        .virtual-links-bar { width: 100%; max-width: 410px; background: #181a20; padding: 10px; border-radius: 8px; border: 1px dashed #2b3139; margin-bottom: 16px; font-size: 11px; color: #848e9c; }
+        .virtual-links-bar span { color: #f3ba2f; font-weight: bold; }
+
+        /* iPhone Canvas Frame */
+        .iphone-frame { width: 100%; max-width: 410px; border-radius: 14px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.8); position: relative; min-height: 580px; transition: background 0.2s; }
+        
+        /* iPhone Status Bar */
+        .iphone-status-bar { height: 36px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; font-size: 13px; font-weight: 600; }
+        .sb-light { background: #ffffff; color: #000000; }
+        .sb-dark { background: #181a20; color: #ffffff; }
+        .sb-right { display: flex; align-items: center; gap: 5px; font-size: 11.5px; }
+        .bat-box { width: 22px; height: 11px; border-radius: 2.5px; display: flex; align-items: center; padding: 1px; position: relative; }
+        .bat-box-light { border: 1px solid #000000; }
+        .bat-box-dark { border: 1px solid #ffffff; }
+        .bat-fill { height: 100%; border-radius: 0.5px; }
         .bat-fill-light { background: #000000; }
-        #view-wallet { display: block; padding: 16px; background: #ffffff; }
-        #view-email { display: none; padding: 16px; background: #121214; color: white; min-height: 520px; }
-        #view-withdrawal { display: none; padding: 16px; background: #181a20; color: white; min-height: 520px; }
-        .wt-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #2b3139; font-size: 14px; }
+        .bat-fill-dark { background: #ffffff; }
+
+        /* Route View Container */
+        .r-view { display: none; padding: 16px; width: 100%; }
+        .r-view.active { display: block; }
+
+        /* ROUTE 1: crypto-wallet.html (Light Theme, No Name) */
+        #rv-wallet { background: #ffffff; color: #000000; }
+        .w-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .w-logo-box { background: #fcd435; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
+        .w-pill { display: flex; background: #eaecef; padding: 2px; border-radius: 6px; }
+        .w-pill div { padding: 4px 10px; font-size: 12px; border-radius: 4px; }
+        .w-pill .active-p { background: #ffffff; color: #1e2026; font-weight: bold; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .w-addr { font-size: 12px; color: #929aa5; margin-bottom: 4px; }
+        .w-big-bal { font-size: 34px; font-weight: 800; letter-spacing: -0.6px; margin-bottom: 2px; }
+        .w-growth { color: #0ecb81; font-size: 12.5px; font-weight: 600; margin-bottom: 18px; }
+        .w-grid { display: flex; justify-content: space-between; text-align: center; margin-bottom: 20px; font-size: 11.5px; font-weight: 500; color: #1e2026; }
+        .w-grid-icon { width: 44px; height: 42px; background: #f5f5f5; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 4px; }
+        .w-promo { background: #fef8e6; border-radius: 10px; padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; color: #000000; }
+        .w-asset-head { font-size: 14px; font-weight: 700; border-bottom: 2px solid #f5f5f5; padding-bottom: 6px; margin-bottom: 12px; color: #1e2026; }
+        .w-token { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
+
+        /* ROUTE 2: binance-deposit-email.html (Gmail Dark) */
+        #rv-email { background: #121214; color: #ffffff; min-height: 520px; }
+        .gm-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 17px; }
+        .gm-sub { font-size: 18px; font-weight: 450; line-height: 1.35; margin-bottom: 16px; }
+        .gm-sender { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .gm-av { width: 38px; height: 38px; background: #b366ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; color: white; }
+        .b-mail-card { background: #1e2026; border-radius: 6px; overflow: hidden; border: 1px solid #2b3139; }
+        .b-mail-head { padding: 16px; text-align: center; background: #181a20; color: #f3ba2f; font-weight: 800; font-size: 16px; letter-spacing: 1.2px; }
+        .b-mail-body { padding: 20px 16px; }
+        .btn-mail { display: inline-block; background: #f3ba2f; color: #181a20; font-weight: 700; padding: 11px 20px; border-radius: 4px; font-size: 13px; margin-top: 14px; text-decoration: none; }
+
+        /* ROUTE 3: withdrawal-details.html (Hero View) */
+        #rv-with-hero { background: #181a20; color: #ffffff; min-height: 520px; }
+        .with-top { padding: 4px 0 12px 0; font-weight: 600; font-size: 15px; border-bottom: 1px solid #2b3139; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        .hero-num-box { text-align: center; padding: 15px 0 20px 0; }
+        .hero-minus { font-size: 30px; font-weight: 700; color: #ffffff; margin-bottom: 4px; }
+        .hero-comp { color: #0ecb81; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 4px; margin-bottom: 12px; }
+        .with-list { display: flex; flex-direction: column; gap: 14px; font-size: 13.5px; margin-top: 10px; }
+        .with-row { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #2b3139; padding-bottom: 12px; }
+        .with-lbl { color: #848e9c; }
+        .with-val { color: #ffffff; font-weight: 500; text-align: right; word-break: break-all; max-width: 230px; font-family: monospace; font-size: 12.5px; }
+        .with-val-text { font-family: sans-serif; }
+        .btn-with-action { display: block; text-align: center; background: #f3ba2f; color: #181a20; font-weight: 700; padding: 13px; border-radius: 8px; font-size: 14px; margin-top: 25px; }
+
+        /* ROUTE 4: withdrawal-details (1).html (List/Backup View) */
+        #rv-with-list { background: #181a20; color: #ffffff; min-height: 520px; }
+        .backup-center { text-align: center; padding: 25px 0; border-bottom: 1px solid #2b3139; }
+        .backup-amt { font-size: 32px; font-weight: 700; color: #ffffff; }
     </style>
 </head>
 <body>
 
-    <h1>Binance Core Engine Pro</h1>
-    <div style="font-size:12px; color:#848e9c; margin-bottom:20px;">Unified Simulator Dashboard</div>
+    <h1>Binance Master AIO Engine</h1>
+    <div class="sub">5-in-1 Unified Synchronized Simulator (Replicates All Links)</div>
     
-    <div class="setup-panel">
-        <div class="form-group"><label>iPhone Status Bar Time:</label><input type="text" id="inpTime" value="6:30"></div>
-        <div class="form-group"><label>Battery Level Percentage (%):</label><input type="number" id="inpBat" value="21"></div>
-        <div class="form-group"><label>Network Signal (e.g., 4G, 5G):</label><input type="text" id="inpNet" value="4G"></div>
-        <div class="form-group"><label>Wallet Balance (USD):</label><input type="text" id="inpBal" value="42,203.19"></div>
-        <div class="form-group"><label>Transaction Amount (USDT):</label><input type="text" id="inpTxAmt" value="773.49665"></div>
-        <div class="form-group"><label>Date & Time:</label><input type="text" id="inpDate" value="2025-04-04 10:43:12"></div>
-        <div class="form-group"><label>Withdrawal Wallet Address:</label><input type="text" id="inpAddress" value="TX7afK9RjMvC5zHqE7bHn2C6eK5d4cfr5d4c3b2a"></div>
-        <div class="form-group"><label>Network Fee (e.g., 1.5 TRX):</label><input type="text" id="inpFee" value="1.5 TRX"></div>
-        <button class="action-btn" onclick="syncEngine()">Apply Changes Instantly</button>
+    <!-- Virtual Link Emulator Status -->
+    <div class="virtual-links-bar">
+        Active Route URL: <span id="currentRouteDisplay">/binance2/crypto-wallet.html</span>
     </div>
 
-    <div class="mode-selector-tabs">
-        <div class="mode-tab-btn mode-tab-active" id="tab-w" onclick="switchView('wallet')">1. Web3 Wallet</div>
-        <div class="mode-tab-btn" id="tab-e" onclick="switchView('email')">2. Deposit Email</div>
-        <div class="mode-tab-btn" id="tab-wt" onclick="switchView('withdrawal')">3. Withdrawal</div>
-    </div>
-
-    <div class="preview-canvas-container">
-        <div class="iphone-status-header-bar iphone-light-theme-bar" id="statusBarLayer">
-            <span id="lblTime">6:30</span>
-            <div style="display:flex; align-items:center; gap:6px; font-size:12px;">
-                <span id="lblNet">4G</span> 📶
-                <span id="lblBatNum">21%</span>
-                <div class="bat-shell-container bat-shell-light" id="lblBatShell"><div class="bat-fill-level bat-fill-light" id="lblBatFill" style="width:21%;"></div></div>
-            </div>
-        </div>
-
-        <!-- VIEW 1: WALLET -->
-        <div id="view-wallet">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                <div style="background:#fcd435; width:32px; height:32px; border-radius:6px; display:flex; align-items:center; justify-content:center;">🔶</div>
-                <div style="display:flex; background:#eaecef; padding:2px; border-radius:6px;"><div style="padding:4px 10px; font-size:12px; color:#767f8d;">Exchange</div><div style="padding:4px 10px; font-size:12px; background:white; border-radius:4px; font-weight:bold;">Web3</div></div>
-                <div style="font-weight:bold;">⛶ 🔍</div>
-            </div>
-            <div style="font-size:13px; color:#929aa5; margin-bottom:4px;">0x78...Gr4P 📋</div>
-            <div style="font-size:34px; font-weight:800; letter-spacing:-0.5px;">$<span id="vWalletBal">42,203.19</span></div>
-            <div style="color:#0ecb81; font-size:13px; font-weight:bold; margin-bottom:15px;">+0.21%</div>
-            <div style="display:flex; justify-content:space-between; text-align:center; margin-bottom:20px; font-size:12px; font-weight:bold;"><div>📤 Send</div><div>📥 Receive</div><div>⇄ Transfer</div><div>••• More</div></div>
-            <div style="background:#fef8e6; padding:12px; border-radius:8px; font-size:13px; color:#1e2026;">Swap to win up to 1 BTC <span style="color:#dfa516; font-weight:bold; float:right;">Join ></span></div>
-        </div>
-
-        <!-- VIEW 2: EMAIL -->
-        <div id="view-email">
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:18px;"><span>←</span><div style="display:flex; gap:15px;"><span>📥</span><span>🗑</span><span>⋮</span></div></div>
-            <div style="font-size:18px; margin-bottom:15px; line-height:1.4;">[Binance] USDT Deposit Confirmed - <span id="vEmailTitle">2025-04-04 10:43:12</span> (UTC)</div>
-            <div style="background:#1e2026; padding:20px; border-radius:6px; border:1px solid #2b3139;">
-                <div style="color:#f3ba2f; font-weight:bold; font-size:16px; margin-bottom:15px;">🔶 BINANCE</div>
-                <div style="font-size:18px; font-weight:bold; margin-bottom:10px;">USDT Deposit Successful</div>
-                <p style="font-size:13.5px; color:#eaecef; line-height:1.5;">Your deposit of <span id="vEmailCoreAmt" style="font-weight:bold; color:white;">773.49665</span> USDT is now available in your Binance account.</p>
-                <div style="display:inline-block; background:#f3ba2f; color:#181a20; font-weight:700; padding:10px 20px; border-radius:4px; font-size:13px; margin-top:15px;">Visit Your Dashboard</div>
-            </div>
-        </div>
-
-        <!-- VIEW 3: WITHDRAWAL -->
-        <div id="view-withdrawal">
-            <div style="padding:10px 0; font-weight:bold; border-bottom:1px solid #2b3139;">← Withdrawal Details</div>
-            <div style="text-align:center; padding:25px 0;">
-                <div style="font-size:32px; font-weight:bold;" id="vWithHeroAmt">-771.99 USDT</div>
-                <div style="color:#0ecb81; font-weight:bold; margin-top:4px;">✓ Completed</div>
-            </div>
-            <div style="font-size:13.5px;">
-                <div class="wt-row"><span style="color:#848e9c;">Network</span><span>TRX</span></div>
-                <div class="wt-row"><span style="color:#848e9c;">Address</span><span id="vWithAddress" style="font-family:monospace; max-width:220px; word-break:break-all;">TX7afK9RjMvC5zHqE7bHn2C6eK5d4cfr5d4c3b2a</span></div>
-                <div class="wt-row"><span style="color:#848e9c;">Amount</span><span id="vWithTotalAmt">773.49665 USDT</span></div>
-                <div class="wt-row"><span style="color:#848e9c;">Network fee</span><span id="vWithFee">1.5 TRX</span></div>
-                <div class="wt-row"><span style="color:#848e9c;">Date</span><span id="vWithDateText">2025-04-04 10:43:12</span></div>
-            </div>
-            <div style="display:block; text-align:center; background:#f3ba2f; color:#181a20; font-weight:700; padding:13px; border-radius:6px; font-size:14px; margin-top:25px;">Withdraw Again</div>
-        </div>
-    </div>
-
-    <script>
-        function syncEngine() {
-            var time = document.getElementById('inpTime').value;
-            var bat = document.getElementById('inpBat').value;
-            var net = document.getElementById('inpNet').value;
-            var bal = document.getElementById('inpBal').value;
-            var txAmt = document.getElementById('inpTxAmt').value;
-            var date = document.getElementById('inpDate').value;
-            var addr = document.getElementById('inpAddress').value;
+    <!-- Master Control Form -->
+    <div class="panel">
+        <div class="sec-title">⚙️ Master Global Inputs (Edit Everything)</div>
+        <div class="fg"><label>iPhone Status Bar Time (e.g., 6:30):</label><input type="text" id="mTime" value="6:30"></div>
+        <div class="fg"><label>Battery Level (%):</label><input type="number" id="mBat" value="21"></div>
+        <div class="fg"><label>Network Tag (e.g., 4G, 5G, Wi-Fi):</label><input type="text" id="mNet" value="4G"></div>
+        <div class="fg"><label>1. Web3 Wallet Balance (USD):</label><input type="text" id="mBal" value="42,203.19"></div>
+        <div class="fg"><label>2 & 3. Transaction Amount (USDT):</label><input type="text" id="mTxAmt" value="773.49665"></div>
+        <div class="fg"><label>2 & 3. Custom Date & Time:</label><input type="text" id="mDate" value="2025-04-04 10:43:12"></div>
+        <div class="fg"><label>3. Withdrawal Destination Address:</label><input type="text" id="mAddr" value="TX7afK9RjMvC5zHqE7bHn2C6eK5d4cfr5d4c3b2a"></div>
